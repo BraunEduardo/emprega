@@ -17,19 +17,19 @@ Cadastro
             <div class="col-md">
                 <div class="form-group">
                     <label class="text-body" for="nome">Nome completo</label>
-                    <input name="nome" id="nome" class="form-control">
+                    <input name="nome" required id="nome" class="form-control">
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="text-body" for="nascimento">Data de nascimento</label>
-                    <input name="nascimento" id="nascimento" type="date" class="form-control">
+                    <input name="nascimento" required id="nascimento" type="date" class="form-control">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="text-body" for="cpf">CPF</label>
-                    <input name="cpf" id="cpf" class="form-control">
+                    <input name="cpf" required id="cpf" class="form-control">
                 </div>
             </div>
         </div>

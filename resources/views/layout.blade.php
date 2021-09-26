@@ -51,7 +51,7 @@
         </style>
     </head>
 
-    <body {{ $_COOKIE['hc']=='true' ? 'class=contrast' : '' }}>
+    <body {{ isset($_COOKIE['hc']) && $_COOKIE['hc']=='true' ? 'class=contrast' : '' }}>
         <div class="flex-center position-ref full-height">
             @yield('conteudo')
         </div>

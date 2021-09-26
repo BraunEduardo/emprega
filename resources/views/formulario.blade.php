@@ -12,7 +12,7 @@ Formulário
             <div class="col-md">
                 <div class="form-group">
                     <label class="text-body" for="nome">Nome completo</label>
-                    <input name="nome" value="{{ old('nome') }}" id="nome" class="form-control {{ $errors->has('nome') ? 'is-invalid' : ( $errors->isNotEmpty() ? 'is-valid' : '' ) }}">
+                    <input name="nome" required value="{{ old('nome') }}" id="nome" class="form-control {{ $errors->has('nome') ? 'is-invalid' : ( $errors->isNotEmpty() ? 'is-valid' : '' ) }}">
                     @error ('nome')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -21,7 +21,7 @@ Formulário
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="text-body" for="nascimento">Data de nascimento</label>
-                    <input name="nascimento" value="{{ old('nascimento') }}" id="nascimento" type="date" class="form-control {{ $errors->has('nascimento') ? 'is-invalid' : ( $errors->isNotEmpty() ? 'is-valid' : '' ) }}">
+                    <input name="nascimento" required value="{{ old('nascimento') }}" id="nascimento" type="date" class="form-control {{ $errors->has('nascimento') ? 'is-invalid' : ( $errors->isNotEmpty() ? 'is-valid' : '' ) }}">
                     @error ('nascimento')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -30,7 +30,7 @@ Formulário
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="text-body" for="cpf">CPF</label>
-                    <input name="cpf" type="tel" minlength="14" value="{{ old('cpf') }}" id="cpf" class="form-control {{ $errors->has('cpf') ? 'is-invalid' : ( $errors->isNotEmpty() ? 'is-valid' : '' ) }}">
+                    <input name="cpf" type="tel" minlength="14" required value="{{ old('cpf') }}" id="cpf" class="form-control {{ $errors->has('cpf') ? 'is-invalid' : ( $errors->isNotEmpty() ? 'is-valid' : '' ) }}">
                     @error ('cpf')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -41,7 +41,7 @@ Formulário
             <div class="col-md">
                 <div class="form-group">
                     <label class="text-body" for="telefone">Telefone</label>
-                    <input name="telefone" type="tel" value="{{ old('telefone') }}" id="telefone" class="form-control {{ $errors->has('telefone') ? 'is-invalid' : ( $errors->isNotEmpty() ? 'is-valid' : '' ) }}">
+                    <input name="telefone" required type="tel" value="{{ old('telefone') }}" id="telefone" class="form-control {{ $errors->has('telefone') ? 'is-invalid' : ( $errors->isNotEmpty() ? 'is-valid' : '' ) }}">
                     @error ('telefone')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -50,7 +50,7 @@ Formulário
             <div class="col-md">
                 <div class="form-group">
                     <label class="text-body" for="email">E-mail</label>
-                    <input name="email" type="email" value="{{ old('email') }}" id="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : ( $errors->isNotEmpty() ? 'is-valid' : '' ) }}">
+                    <input name="email" required type="email" value="{{ old('email') }}" id="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : ( $errors->isNotEmpty() ? 'is-valid' : '' ) }}">
                     @error ('email')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

@@ -7,7 +7,7 @@ Busca
 @section('conteudo')
 <div class="container">
 
-    <div class=" text-center">
+    <div class="row text-center">
         <div class="col-md">
             <div class="form-group" style="font-size: 1.8em">
                 <label class="text-body" for="busca">Insira aqui os termos pelos quais deseja buscar</label>
@@ -15,7 +15,7 @@ Busca
                     @csrf
                     <div class="row">
                         <div class="col-md-10">
-                            <select name="busca" id="busca" class="form-control form-control-lg">
+                            <select name="busca" required id="busca" class="form-control form-control-lg">
                                 <option></option>
                                 @foreach (App\Formacao::select('curso')->distinct()->pluck('curso') as $curso)
                                 <option value="curso_{{ $curso }}">{{ $curso }}</option>
@@ -36,6 +36,14 @@ Busca
                     É possível realizar busca por cargos, nomes, e-mail e cursos
                 </i>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+            <button type="button" class="btn btn-white" onclick="window.location.href = '/';">
+                <i class="fa fa-reply"></i>
+                <b> Voltar</b>
+            </button>
         </div>
     </div>
 </div>

@@ -195,7 +195,7 @@ class PessoaController extends Controller
                         ->where('experiencias.cargo', '=', substr($busca, 6))
                         ->whereRaw('pessoas.id = experiencias.pessoa_id');
             });
-            $cargos = $cargos->where('curso', '<>', substr($busca, 6));
+            $cargos = $cargos->where('cargo', '<>', substr($busca, 6));
         } else {
             $resultados = $resultados->where(function ($query) use ($busca) {
                 $query->where('nome', '~*', $busca)
