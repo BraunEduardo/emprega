@@ -15,10 +15,10 @@ Busca
 						<div class="col-md-10">
 							<select name="busca" required id="busca" class="form-control form-control-lg">
 								<option></option>
-								@foreach (App\Formacao::select('curso')->distinct()->pluck('curso') as $curso)
-								<option value="curso_{{ $curso }}">{{ $curso }}</option>
+								@foreach (App\Empresa::select('razao_social', 'id')->distinct()->pluck('razao_social', 'id') as $id => $empresa)
+								<option value="empresa_{{ $id }}">{{ $empresa }}</option>
 								@endforeach
-								@foreach (App\Experiencia::select('cargo')->distinct()->pluck('cargo') as $cargo)
+								@foreach (App\Vaga::select('cargo')->distinct()->pluck('cargo') as $cargo)
 								<option value="cargo_{{ $cargo }}">{{ $cargo }}</option>
 								@endforeach
 							</select>
@@ -31,19 +31,19 @@ Busca
 					</div>
 				</form>
 				<i id="descricao" class="form-text" style="font-size: 0.8em">
-					É possível realizar busca por cargos, nomes, e-mail e cursos
+					É possível realizar busca por cargos, empresas e descrição de vagas
 				</i>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="container" id="resultadosContainer">
-	@each('resultado', $resultados, 'resultado')
+	@each('resultadoVaga', $resultados, 'resultado')
 
 	<div class="row">
 		<div class="col text-center">
-			<a class="btn btn-white" href="{{ route('inicio') }}">
-				<i class="fa fa-reply"></i>
+            <a class="btn btn-white" href="{{ route('inicio') }}">
+                <i class="fa fa-reply"></i>
 				<b> Voltar</b>
 			</a>
 		</div>
@@ -60,6 +60,25 @@ Busca
 	});
 
 	$('#resultadosContainer').css('margin-top', $('#buscaContainer').outerHeight(true));
+
+    function inscrever(id) {
+        $.ajax('{{ url('inscrever') }}' + '/' + id)
+            .done(mensagem => {
+                Swal.fire({
+                    icon: 'success',
+                    title: mensagem,
+                    timer: 1000
+                });
+            })
+            .fail(error => {
+                Swal.fire({
+                    icon: 'success',
+                    title: error.responseBody,
+                    timer: 2500
+                });
+            })
+
+    }
 </script>
 @endsection
 

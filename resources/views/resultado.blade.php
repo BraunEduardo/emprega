@@ -24,7 +24,7 @@
     </div>
     <div class="row my-2">
         <div class="col text-center">
-            <a href="detalhes/{{ $resultado->id }}" class="pt-2 font-weight-bold">Ver mais...</a>
+            <a href="{{ route('detalhes', [$resultado->id]) }}" class="pt-2 font-weight-bold">Ver mais...</a>
         </div>
     </div>
     <hr>

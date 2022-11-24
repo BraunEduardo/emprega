@@ -125,7 +125,6 @@ Detalhes
 <script>
     function copy_text_from_element(element) {
         var textArea = document.createElement("textarea");
-        console.log(element, element);
         textArea.value = element.textContent;
         document.body.appendChild(textArea);
         textArea.select();
@@ -147,7 +146,6 @@ Detalhes
         })
     }
 </script>
-}
 @endsection
 
 <style>
@@ -155,7 +153,7 @@ Detalhes
         color: inherit !important;
     }
 
-    label {
+    .container label {
         display: block !important;
     }
 

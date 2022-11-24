@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Empresa;
 use App\Experiencia;
 use App\Formacao;
 use App\Http\Requests\PessoaRequest;
+use App\Inscricao;
 use App\Pessoa;
 use App\Services\ChecarPessoa;
+use App\Vaga;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 
 class PessoaController extends Controller
@@ -29,6 +33,9 @@ class PessoaController extends Controller
 
             return redirect(route('formulario'));
         } else {
+            Cookie::queue('pessoa', $pessoa->id, 864000);
+            Cookie::queue('tpessoa', 'empregado', 864000);
+
             return $this->show($pessoa->id);
         }
     }
@@ -41,6 +48,7 @@ class PessoaController extends Controller
     public function cadastro()
     {
         session()->forget('_old_input');
+        Cookie::queue('pagina', 'cadastro');
 
         return view('cadastro');
     }
@@ -134,6 +142,7 @@ class PessoaController extends Controller
         }
 
         DB::commit();
+        Cookie::queue('pagina', 'formulario.edit');
 
         return $this->show($pessoa->id)->with('sucesso', 'Dados salvos com sucesso!');
     }
@@ -163,6 +172,8 @@ class PessoaController extends Controller
             }
         }
 
+        Cookie::queue('pagina', 'formulario.edit');
+
         return redirect(route('formulario'));
     }
 
@@ -173,41 +184,40 @@ class PessoaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function buscar(Request $request)
+    public static function buscar(Request $request)
     {
+        Cookie::queue('pagina', 'busca');
         $busca = $request->input('busca');
-        $resultados = Pessoa::with(['formacoes', 'experiencias', 'municipio', 'municipio.estado']);
-        $cursos = Formacao::select('curso')->distinct();
-        $cargos = Experiencia::select('cargo')->distinct();
 
-        if (0 === strpos($busca, 'curso_')) {
-            $resultados = $resultados->whereExists(function ($query) use ($busca) {
-                $query->select(DB::raw(1))
-                        ->from('formacoes')
-                        ->where('formacoes.curso', '=', substr($busca, 6))
-                        ->whereRaw('pessoas.id = formacoes.pessoa_id');
-            });
-            $cursos = $cursos->where('curso', '<>', substr($busca, 6));
+        if (empty($busca)) {
+            Cookie::forget('termo');
+
+            return view('buscaVagas');
+        }
+
+        $resultados = Vaga::with(['empresa', 'empresa.municipio', 'empresa.municipio.estado']);
+        $cargos = Vaga::select('cargo')->distinct();
+        $empresas = Empresa::select('razao_social')->distinct();
+
+        if (0 === strpos($busca, 'empresa_')) {
+            $resultados = $resultados->where('empresa_id', substr($busca, 8));
+            $empresas = $empresas->where('id', '<>', substr($busca, 8));
         } elseif (0 === strpos($busca, 'cargo_')) {
-            $resultados = $resultados->whereExists(function ($query) use ($busca) {
-                $query->select(DB::raw(1))
-                        ->from('experiencias')
-                        ->where('experiencias.cargo', '=', substr($busca, 6))
-                        ->whereRaw('pessoas.id = experiencias.pessoa_id');
-            });
+            $resultados = $resultados->where('cargo', '~*', substr($busca, 6));
             $cargos = $cargos->where('cargo', '<>', substr($busca, 6));
         } else {
             $resultados = $resultados->where(function ($query) use ($busca) {
-                $query->where('nome', '~*', $busca)
-                        ->orWhere('email', '~*', $busca);
+                $query->where('descricao', '~*', $busca);
             });
         }
 
         $resultados = $resultados->get();
-        $cursos = $cursos->pluck('curso');
+        $empresas = $empresas->pluck('razao_social');
         $cargos = $cargos->pluck('cargo');
 
-        return view('resultados', compact('resultados', 'busca', 'cursos', 'cargos'));
+        Cookie::queue('termo', $busca);
+
+        return view('resultadosVagas', compact('resultados', 'busca', 'empresas', 'cargos'));
     }
 
     public function detalhes(int $id)
@@ -217,25 +227,16 @@ class PessoaController extends Controller
         return view('detalhes', compact('pessoa'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function inscrever(Request $request, int $id)
     {
-    }
+        $inscricao = Inscricao::firstOrCreate([
+            'vaga_id' => $id,
+            'pessoa_id' => $request->cookie('pessoa'),
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
+        if ( $inscricao->wasRecentlyCreated )
+            return response('Inscrição realizada com sucesso', 201);
+
+        return response('Inscrição existente', 200);
     }
 }

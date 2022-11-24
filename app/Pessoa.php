@@ -38,6 +38,11 @@ class Pessoa extends Model
         return $this->hasMany(Formacao::class);
     }
 
+    public function inscricoes()
+    {
+        return $this->hasMany(Inscricao::class);
+    }
+
     public function municipio()
     {
         return $this->belongsTo(Municipio::class);
