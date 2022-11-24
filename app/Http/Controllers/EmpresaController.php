@@ -96,7 +96,9 @@ class EmpresaController extends Controller
             $empresa->telefone = $request->input('telefone');
             $empresa->email = $request->input('email');
             $empresa->municipio_id = $request->input('municipio_id');
-            $empresa->vagas()->delete();
+            $empresa->vagas->each(function (Vaga $vaga) {
+                $vaga->delete();
+            });
 
             if ($request->has('cargo')) {
                 foreach ($request->input('cargo') as $chave => $cargo) {

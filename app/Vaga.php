@@ -9,9 +9,19 @@ class Vaga extends Model
     protected $table = 'vagas';
     public $timestamps = false;
 
+    public function delete()
+    {
+        $this->inscricoes()->delete();
+    }
+
     public function empresa()
     {
         return $this->belongsTo(Empresa::class);
+    }
+
+    public function inscricoes()
+    {
+        return $this->hasMany(Inscricao::class);
     }
 
     public function getRemuneracaoAttribute($remuneracao)
